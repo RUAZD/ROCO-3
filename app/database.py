@@ -2,7 +2,7 @@ import os
 
 import asyncpg
 
-DATABASE_URL: str = os.getenv('DATABASE_URL_HOME')
+DATABASE_URL: str = os.getenv('DATABASE_URL_s')
 
 
 class DataBase:
