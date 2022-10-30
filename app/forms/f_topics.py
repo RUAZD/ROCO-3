@@ -33,6 +33,6 @@ async def func(admin: asyncpg.Record = Depends(get_current_user),
 @router.delete('/del', summary='Удаление темы интересов [ADMIN]', response_model=schemes.Deleted)
 async def func(user: asyncpg.Record = Depends(get_current_user),
                topic_id: int = Form(description='ID темы интересов')) -> schemes.Deleted:
-    await q_admin.admin_add(admin.get('id'))
+    await q_admin.admin_add(user.get('id'))
     await q_topics.topic_del(topic_id)
     return schemes.Deleted()

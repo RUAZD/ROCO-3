@@ -24,12 +24,12 @@ async def func(
 async def func():
     out = list()
     for C in await q_courses.course_list():
-        teacher = await q_teachers.teacher_get(C.get('id'))
+        teacher = await q_teachers.teacher_get(C.get('teacher_id'))
         out.append(schemes.CourseComplex(
             course=format_record(C, schemes.CourseBase),
             teacher=format_record(teacher, schemes.UserTeacherBase)
         ))
-    return format_records(await q_courses.course_list(), schemes.CourseComplex)
+    return out
 
 
 @router.put('/edit', summary='Изменение данных о курсе [TEACHER]', response_model=schemes.Updated)

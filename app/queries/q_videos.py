@@ -12,7 +12,6 @@ async def video_add(link: str, title: str, description: str, posting_time: datet
     """ Добавляет новое видео в базу данных. """
     if posting_time is None:
         posting_time = datetime.fromtimestamp(time.time())
-        print('\n\n\n', posting_time, '\n\n\n', sep='')
     sql = 'INSERT INTO videos (link, title, description, posting_time, creator_id) VALUES ($1, $2, $3, $4, $5)'
     await DataBase.execute(sql, link, title, description, posting_time, creator_id)
 

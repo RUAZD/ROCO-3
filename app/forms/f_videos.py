@@ -13,11 +13,10 @@ async def func(
         teacher: asyncpg.Record = Depends(get_current_user),
         link: str = Form(description='Ссылка на видеоролик'),
         title: str = Form(description='Название видеоролика'),
-        description: str = Form(None, description='Описание видеоролика'),
-        posting_time: datetime = Form(None, description='Время публикации видеоролика')
+        description: str = Form(None, description='Описание видеоролика')
 ) -> Created:
     await teacher_get(teacher.get('id'))
-    await video_add(link, title, description, posting_time, teacher.get('id'))
+    await video_add(link, title, description, teacher.get('id'))
     return Created()
 
 
