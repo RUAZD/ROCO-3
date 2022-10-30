@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, Form
 
 from app.utils import format_records
 from app import schemes
-from app.queries import q_topics
+from app.queries import q_topics, q_admin
 from app.user_hash import get_current_user
 
 router = APIRouter(prefix='/topic', tags=['Темы интересов [Редактируются администратором]'])
@@ -12,7 +12,7 @@ router = APIRouter(prefix='/topic', tags=['Темы интересов [Реда
 @router.post('/create', summary='Создание новой темы интересов [ADMIN]', response_model=schemes.Created)
 async def func(admin: asyncpg.Record = Depends(get_current_user),
                name: str = Form(description='Название новой темы интересов')) -> schemes.Created:
-    await check_admin(admin.get('id'))
+    await q_admin.admin_add(admin.get('id'))
     await q_topics.topic_add(name)
     return schemes.Created()
 
@@ -25,7 +25,7 @@ async def func(): return format_records(await q_topics.topic_list(), schemes.Top
 async def func(admin: asyncpg.Record = Depends(get_current_user),
                topic_id: int = Form(description='ID темы интересов'),
                name: str = Form(description='Новое название темы интересов')) -> schemes.Updated:
-    await check_admin(admin.get('id'))
+    await q_admin.admin_add(admin.get('id'))
     await q_topics.topic_edit(topic_id, name)
     return schemes.Updated()
 
@@ -33,6 +33,6 @@ async def func(admin: asyncpg.Record = Depends(get_current_user),
 @router.delete('/del', summary='Удаление темы интересов [ADMIN]', response_model=schemes.Deleted)
 async def func(user: asyncpg.Record = Depends(get_current_user),
                topic_id: int = Form(description='ID темы интересов')) -> schemes.Deleted:
-    await check_admin(user.get('id'))
+    await q_admin.admin_add(admin.get('id'))
     await q_topics.topic_del(topic_id)
     return schemes.Deleted()

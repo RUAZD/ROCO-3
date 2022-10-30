@@ -18,23 +18,39 @@ class DataBase:
 
     @classmethod
     async def execute(cls, sql, *args) -> None:
+        try:
+            cls.pool.acquire()
+        except AttributeError:
+            cls.pool = await asyncpg.create_pool(DATABASE_URL)
         async with cls.pool.acquire() as con:
             await con.execute(sql, *args)
 
     @classmethod
     async def fetch(cls, sql, *args) -> list[asyncpg.Record]:
+        try:
+            cls.pool.acquire()
+        except AttributeError:
+            cls.pool = await asyncpg.create_pool(DATABASE_URL)
         async with cls.pool.acquire() as con:
             result = await con.fetch(sql, *args)
         return result
 
     @classmethod
     async def fetchrow(cls, sql, *args) -> asyncpg.Record:
+        try:
+            cls.pool.acquire()
+        except AttributeError:
+            cls.pool = await asyncpg.create_pool(DATABASE_URL)
         async with cls.pool.acquire() as con:
             result = await con.fetchrow(sql, *args)
         return result
 
     @classmethod
     async def fetchval(cls, sql, *args):
+        try:
+            cls.pool.acquire()
+        except AttributeError:
+            cls.pool = await asyncpg.create_pool(DATABASE_URL)
         async with cls.pool.acquire() as con:
             result = await con.fetchval(sql, *args)
         return result
